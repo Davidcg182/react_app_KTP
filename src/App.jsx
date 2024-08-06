@@ -5,6 +5,9 @@ import store from './store';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
 import Dashboard from './pages/Dashboard';
+import Tickets from './pages/Tickets';
+import Employees from './pages/Employees';
+import UserInfo from './pages/UserInfo';
 
 const App = () => {
   return (
@@ -13,7 +16,11 @@ const App = () => {
         <Routes>
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
-          <Route path="/" element={<Dashboard />} />
+          <Route path="/" element={<Dashboard />}>
+            <Route index element={<Tickets />} />
+            <Route path="employees" element={<Employees />} />
+            <Route path="userinfo" element={<UserInfo />} />
+          </Route>
           {/* Otras rutas */}
         </Routes>
       </Router>

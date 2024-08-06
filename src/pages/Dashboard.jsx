@@ -1,47 +1,22 @@
-import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import TicketCard from '../components/TicketCard';
-import AddTicketModal from '../components/AddTicketModal';
+import React from 'react';
+import { Link, Outlet, useNavigate } from 'react-router-dom';
 
 const Dashboard = () => {
-    const [tickets, setTickets] = useState([]);
-    const [isModalOpen, setIsModalOpen] = useState(false);
     const navigate = useNavigate();
 
-    useEffect(() => {
-        const fetchTickets = async () => {
-            const token = localStorage.getItem('token');
-            if (!token) {
-                navigate('/login');
-                return;
-            }
-
-            try {
-                const response = await fetch('https://node-app-ktp.onrender.com/tickets', {
-                    headers: {
-                        'Authorization': `Bearer ${token}`,
-                    },
-                });
-
-                const data = await response.json();
-
-                if (data.status === 'fail') {
-                    navigate('/login');
-                } else {
-                    setTickets(data.data);
-                }
-            } catch (error) {
-                console.error('Error fetching tickets:', error);
-                navigate('/login');
-            }
-        };
-
-        fetchTickets();
-    }, [navigate]);
-
-    const handleAddTicket = (newTicket) => {
-        setTickets([...tickets, { ...newTicket, user: tickets[0].user }]);
-    };
+    //   const userName = localStorage.getItem('userName'); // Assuming userName is stored in localStorage
+    //QUITAR
+    //QUITAR
+    //QUITAR
+    //QUITAR
+    //QUITAR
+    //QUITAR
+    //QUITAR
+    //QUITAR
+    //QUITAR
+    //QUITAR
+    //QUITAR
+    const userName = 'David Castillejo Guisao'
 
     const handleLogOut = () => {
         localStorage.clear();
@@ -49,31 +24,31 @@ const Dashboard = () => {
     };
 
     return (
-        <div className="flex flex-col items-center p-4 bg-gray-100 min-h-screen">
-            <div className="flex justify-between w-full max-w-2xl mb-4">
-                <button
-                    className="px-4 py-2 text-white bg-blue-500 rounded"
-                    onClick={() => setIsModalOpen(true)}
-                >
-                    Add Ticket
-                </button>
-                <button
-                    className="px-4 py-2 text-white bg-red-500 rounded"
-                    onClick={handleLogOut}
-                >
-                    Log Out
-                </button>
+        <div className="flex min-h-screen">
+            <aside className="w-64 bg-gray-800 text-white">
+                <div className="p-4">
+                    <h2 className="text-2xl font-semibold">Dashboard</h2>
+                </div>
+                <nav className="flex flex-col p-4">
+                    <Link to="/" className="mb-2 px-4 py-2 hover:bg-gray-700 rounded">Tickets</Link>
+                    <Link to="/employees" className="mb-2 px-4 py-2 hover:bg-gray-700 rounded">Empleados</Link>
+                    <Link to="/userinfo" className="mb-2 px-4 py-2 hover:bg-gray-700 rounded">Mi Información</Link>
+                </nav>
+            </aside>
+            <div className="flex-1 flex flex-col">
+                <header className="bg-gray-900 text-white p-4 flex justify-between items-center">
+                    <span>Welcome, {userName}</span>
+                    <button
+                        className="px-4 py-2 text-white bg-red-500 rounded"
+                        onClick={handleLogOut}
+                    >
+                        Log Out
+                    </button>
+                </header>
+                <main className="flex-1 p-4">
+                    <Outlet />
+                </main>
             </div>
-            <div className="flex flex-wrap justify-center w-full">
-                {tickets.map(ticket => (
-                    <TicketCard key={ticket.code} ticket={ticket} />
-                ))}
-            </div>
-            <AddTicketModal
-                isOpen={isModalOpen}
-                onClose={() => setIsModalOpen(false)}
-                onAddTicket={handleAddTicket}
-            />
         </div>
     );
 };

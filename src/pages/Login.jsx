@@ -1,16 +1,19 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { login } from '../store/authSlice';
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const handleLogin = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
+
     try {
       const response = await fetch('https://node-app-ktp.onrender.com/auth/login', {
         method: 'POST',
@@ -19,7 +22,7 @@ const Login = () => {
         },
         body: JSON.stringify({ email, password }),
       });
-  
+
       const data = await response.json();
       if (data.status === 'success') {
         dispatch(login(data.token));
@@ -43,9 +46,10 @@ const Login = () => {
     } catch (error) {
       console.error('Error during login:', error);
       alert('An error occurred during login. Please try again.');
+    } finally {
+      setIsLoading(false);
     }
   };
-  
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
@@ -71,9 +75,21 @@ const Login = () => {
             required
           />
         </div>
-        <button type="submit" className="w-full px-3 py-2 text-white bg-blue-500 rounded">
-          Login
+        <button
+          type="submit"
+          className={`w-full px-3 py-2 text-white bg-blue-500 rounded ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
+          disabled={isLoading}
+        >
+          {isLoading ? 'Loading...' : 'Login'}
         </button>
+        <div className="mt-4 text-center">
+          <p className="text-gray-700">
+            No estás registrado?{' '}
+            <Link to="/signup" className="text-blue-500 hover:underline">
+              Regístrate aquí
+            </Link>
+          </p>
+        </div>
       </form>
     </div>
   );

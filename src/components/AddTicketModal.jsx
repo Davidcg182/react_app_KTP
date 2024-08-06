@@ -34,7 +34,7 @@ const AddTicketModal = ({ isOpen, onClose, onAddTicket }) => {
       const data = await response.json();
 
       if (data.status === 'success') {
-        onAddTicket(data.data);
+        // onAddTicket(data.data);
         onClose();
       } else {
         alert('Failed to add ticket.');
