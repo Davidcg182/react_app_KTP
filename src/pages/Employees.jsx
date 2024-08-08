@@ -20,7 +20,7 @@ const Employees = () => {
         salary: ''
     });
     const [employeeToDelete, setEmployeeToDelete] = useState(null);
-    const resultsPerPage = 3;
+    const resultsPerPage = 5;
     const navigate = useNavigate();
 
     const fetchEmployees = async (page) => {
@@ -56,10 +56,6 @@ const Employees = () => {
     useEffect(() => {
         fetchEmployees(currentPage);
     }, [currentPage, navigate]);
-
-    // const handleAddEmployee = (newEmployee) => {
-    //     setEmployees([...employees, newEmployee]);
-    // };
 
     const handleUpdateEmployee = (updatedEmployee) => {
         setEmployees(employees.map(employee => employee.id === updatedEmployee.id ? updatedEmployee : employee));

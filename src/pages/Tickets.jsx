@@ -8,7 +8,7 @@ const Tickets = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
-    const resultsPerPage = 30;
+    const resultsPerPage = 5;
     const navigate = useNavigate();
 
     const fetchTickets = async (page) => {
