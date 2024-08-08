@@ -8,7 +8,7 @@ const Tickets = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
-    const resultsPerPage = 3;
+    const resultsPerPage = 30;
     const navigate = useNavigate();
 
     const fetchTickets = async (page) => {
@@ -32,8 +32,7 @@ const Tickets = () => {
             } else {
                 setTickets(data.data);
 
-                // const totalResultados = data.data.total
-                const totalResultados = 10
+                const totalResultados = data.total
 
                 setTotalPages(Math.ceil(totalResultados / resultsPerPage));
 
@@ -43,7 +42,7 @@ const Tickets = () => {
             navigate('/login');
         }
     };
-
+    
     useEffect(() => {
         fetchTickets(currentPage);
     }, [currentPage, navigate]);
@@ -70,7 +69,7 @@ const Tickets = () => {
                 className="mb-4 px-4 py-2 text-white bg-blue-500 rounded"
                 onClick={() => setIsModalOpen(true)}
             >
-                Add Ticket
+                Nuevo Ticket
             </button>
             <div className="flex flex-wrap justify-center w-full">
                 {tickets.map(ticket => (
@@ -88,7 +87,7 @@ const Tickets = () => {
                     disabled={currentPage === 1}
                     onClick={() => handlePageChange(currentPage - 1)}
                 >
-                    Previous
+                    &lt;&lt;
                 </button>
                 <span className="px-3 py-1 mx-1 text-gray-700">
                     Page {currentPage} of {totalPages}
@@ -98,7 +97,7 @@ const Tickets = () => {
                     disabled={currentPage === totalPages}
                     onClick={() => handlePageChange(currentPage + 1)}
                 >
-                    Next
+                    &gt;&gt;
                 </button>
             </div>
             <AddTicketModal

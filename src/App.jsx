@@ -21,7 +21,6 @@ const App = () => {
             <Route path="employees" element={<Employees />} />
             <Route path="userinfo" element={<UserInfo />} />
           </Route>
-          {/* Otras rutas */}
         </Routes>
       </Router>
     </Provider>

@@ -7,18 +7,15 @@ const AddTicketModal = ({ isOpen, onClose, onAddTicket }) => {
 
   const handleAddTicket = async (e) => {
     e.preventDefault();
-    const userId = localStorage.getItem('userId');
-    if (!userId) {
-      alert('User not logged in.');
-      return;
-    }
+
     const token = localStorage.getItem('token');
+    const user = JSON.parse(localStorage.getItem('user'));
 
     const newTicket = {
       code: code,
       summary: summary,
       description: description,
-      userId: userId,
+      userId: user.id,
     };
 
     try {
@@ -33,11 +30,17 @@ const AddTicketModal = ({ isOpen, onClose, onAddTicket }) => {
 
       const data = await response.json();
 
+      console.log(data)
+
       if (data.status === 'success') {
-        // onAddTicket(data.data);
+        onAddTicket(data.data);
+        onClose();
+      } else if (data.status === 'fail' && data.message.toUpperCase().includes('AUTH')) {
+        alert('No tienes permisos para realizar esta accion');
         onClose();
       } else {
         alert('Failed to add ticket.');
+        onClose();
       }
     } catch (error) {
       console.error('Error adding ticket:', error);

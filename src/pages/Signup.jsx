@@ -42,10 +42,12 @@ const Signup = () => {
 
       if (data.status === 'success') {
         const token = data.data.token;
+
         localStorage.setItem('token', token);
-        localStorage.setItem('userId', data.data.userId);
+        localStorage.setItem('user', JSON.stringify(data.data));
+        
         dispatch(login(token));
-        navigate('/'); // Redirige al Dashboard
+        navigate('/');
       } else {
         console.error('Signup failed:', data.message);
       }

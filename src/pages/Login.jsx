@@ -26,19 +26,7 @@ const Login = () => {
       const data = await response.json();
       if (data.status === 'success') {
         dispatch(login(data.token));
-        // localStorage.setItem('userId', data.user.id); // Guardar userId
-
-        //QUITAR
-        //QUITAR
-        //QUITAR
-        //QUITAR
-        //QUITAR
-        //QUITAR
-        //QUITAR
-        //QUITAR
-        //QUITAR
-        localStorage.setItem('userId', '1'); // Guardar userId
-
+        localStorage.setItem('user', JSON.stringify(data.user));
         navigate('/');
       } else {
         alert('Login failed!');

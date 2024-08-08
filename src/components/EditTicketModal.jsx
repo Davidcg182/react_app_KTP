@@ -9,7 +9,6 @@ const EditTicketModal = ({ isOpen, onClose, ticket, onUpdateTicket }) => {
         e.preventDefault();
 
         const token = localStorage.getItem('token');
-        // const userId = localStorage.getItem('userId');
 
         try {
             const response = await fetch(`https://node-app-ktp.onrender.com/tickets/update/${ticket.id}`, {
@@ -24,7 +23,12 @@ const EditTicketModal = ({ isOpen, onClose, ticket, onUpdateTicket }) => {
             const data = await response.json();
 
             if (data.status === 'success') {
-                // onUpdateTicket(data.data);
+
+                console.log('editd modal', data)
+                onUpdateTicket(data.data);
+                onClose();
+            } else if (data.status === 'fail' && data.message.toUpperCase().includes('AUTH')) {
+                alert('No tienes permisos para realizar esta accion');
                 onClose();
             } else {
                 console.error('Failed to update ticket:', data.message);

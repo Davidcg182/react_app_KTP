@@ -1,7 +1,7 @@
 // src/pages/Employees.jsx
 import React, { useEffect, useState } from 'react';
 import EmployeeCard from '../components/EmployeeCard';
-import ConfirmationModal from '../components/ConfirmationModal';
+import DeleteUserModal from '../components/DeleteUserModal';
 import { useNavigate } from 'react-router-dom';
 import Modal from 'react-modal';
 
@@ -44,8 +44,7 @@ const Employees = () => {
             } else {
                 setEmployees(data.data);
 
-                // const total = data.data.total
-                const total = 10
+                const total = data.total
                 setTotalPages(Math.ceil(total / resultsPerPage));
             }
         } catch (error) {
@@ -58,9 +57,9 @@ const Employees = () => {
         fetchEmployees(currentPage);
     }, [currentPage, navigate]);
 
-    const handleAddEmployee = (newEmployee) => {
-        setEmployees([...employees, newEmployee]);
-    };
+    // const handleAddEmployee = (newEmployee) => {
+    //     setEmployees([...employees, newEmployee]);
+    // };
 
     const handleUpdateEmployee = (updatedEmployee) => {
         setEmployees(employees.map(employee => employee.id === updatedEmployee.id ? updatedEmployee : employee));
@@ -82,14 +81,16 @@ const Employees = () => {
             });
 
             if (response.ok) {
-                // setEmployees(employees.filter(employee => employee.id !== employeeToDelete));
+                setEmployees(employees.filter(employee => employee.id !== employeeToDelete));
                 setEmployeeToDelete(null);
                 setIsConfirmModalOpen(false);
             } else {
-                console.error('Error deleting employee');
+                alert('No tienes permisos para realizar esta accion');
+                setIsConfirmModalOpen(false);
             }
         } catch (error) {
             console.error('Error deleting employee:', error);
+            setIsConfirmModalOpen(false);
         }
     };
 
@@ -135,7 +136,10 @@ const Employees = () => {
             const data = await response.json();
 
             if (data.status === 'success') {
-                // handleUpdateEmployee(data.data.user);
+                handleUpdateEmployee(data.data);
+                setIsModalOpen(false);
+            } else if (data.status === 'fail' && data.message.toUpperCase().includes('AUTH')) {
+                alert('No tienes permisos para realizar esta accion');
                 setIsModalOpen(false);
             } else {
                 console.error('Error updating employee:', data.message);
@@ -168,7 +172,7 @@ const Employees = () => {
                     disabled={currentPage === 1}
                     onClick={() => handlePageChange(currentPage - 1)}
                 >
-                    Previous
+                    &lt;&lt;
                 </button>
                 <span className="px-3 py-1 mx-1 text-gray-700">
                     Page {currentPage} of {totalPages}
@@ -178,7 +182,7 @@ const Employees = () => {
                     disabled={currentPage === totalPages}
                     onClick={() => handlePageChange(currentPage + 1)}
                 >
-                    Next
+                    &gt;&gt;
                 </button>
             </div>
             <Modal
@@ -241,12 +245,12 @@ const Employees = () => {
                     </button>
                 </form>
             </Modal>
-            <ConfirmationModal
+            <DeleteUserModal
                 isOpen={isConfirmModalOpen}
                 onRequestClose={() => setIsConfirmModalOpen(false)}
                 onConfirm={handleDeleteEmployee}
                 onCancel={() => setIsConfirmModalOpen(false)}
-                message="Are you sure you want to delete this employee?"
+                message="¿Esta seguro que desea eliminar este usuario? (esta accion no se puede deshacer)"
             />
         </div>
     );

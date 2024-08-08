@@ -18,6 +18,9 @@ const DeleteTicketModal = ({ isOpen, onClose, ticket, onDeleteTicket }) => {
       if (data.status === 'success') {
         onDeleteTicket(ticket.id);
         onClose();
+      } else if (data.status === 'fail' && data.message.toUpperCase().includes('AUTH')) {
+        alert('No tienes permisos para realizar esta accion');
+        onClose();
       } else {
         console.error('Failed to delete ticket:', data.message);
       }
@@ -33,20 +36,20 @@ const DeleteTicketModal = ({ isOpen, onClose, ticket, onDeleteTicket }) => {
       className="flex justify-center items-center min-h-screen"
     >
       <div className="bg-white p-4 rounded shadow-md w-full max-w-md">
-        <h2 className="text-xl font-semibold mb-4">Delete Ticket</h2>
-        <p>Are you sure you want to delete this ticket?</p>
+        <h2 className="text-xl font-semibold mb-4">Eliminar Ticket</h2>
+        <p>¿Esta seguro que desea eliminar este ticket? (esta accion no se puede deshacer)</p>
         <div className="flex justify-end space-x-2 mt-4">
           <button
             onClick={onClose}
             className="px-4 py-2 bg-gray-500 text-white rounded"
           >
-            Cancel
+            Cancelar
           </button>
           <button
             onClick={handleDelete}
             className="px-4 py-2 bg-red-500 text-white rounded"
           >
-            Delete
+            Confirmar
           </button>
         </div>
       </div>
